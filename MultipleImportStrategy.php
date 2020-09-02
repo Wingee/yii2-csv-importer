@@ -73,7 +73,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
 			try {
 				$countInserts += \Yii::$app->db->createCommand()
 					->batchInsert($this->tableName, $attributes, $chunk)->execute();
-			} catch(CDbException $e) {}
+			} catch(PDOException $e) {}
 
 
         }
