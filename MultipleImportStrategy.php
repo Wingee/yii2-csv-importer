@@ -13,9 +13,9 @@ use ruskid\csvimporter\ImportInterface;
 use ruskid\csvimporter\BaseImportStrategy;
 
 /**
- * Will import from CSV. This will batch insert the rows, no validation is performed. 
+ * Will import from CSV. This will batch insert the rows, no validation is performed.
  * This is the fastest way to insert big amounts of data.
- * 
+ *
  * @author Victor Demin <demin@trabeja.com>
  */
 class MultipleImportStrategy extends BaseImportStrategy implements ImportInterface {
@@ -27,13 +27,13 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
     public $tableName;
 
     /**
-     * Limit items per single insert query. 
-     * On batch insert the single query can become huge and you can get mysql exception: 
-     * "Communication link failure: 1153 Got a packet bigger than 'max_allowed_packet' bytes". 
-     * 
-     * This parameter will divide array of values in chunks and then execute multiple 
-     * insert queries. If you don't want this limit, set it to 0 (not recommended). 
-     * @var integer 
+     * Limit items per single insert query.
+     * On batch insert the single query can become huge and you can get mysql exception:
+     * "Communication link failure: 1153 Got a packet bigger than 'max_allowed_packet' bytes".
+     *
+     * This parameter will divide array of values in chunks and then execute multiple
+     * insert queries. If you don't want this limit, set it to 0 (not recommended).
+     * @var integer
      */
     public $maxItemsPerInsert = 10000;
 
@@ -70,8 +70,12 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
         $countInserts = 0;
         $chunks = array_chunk($values, $this->maxItemsPerInsert);
         foreach ($chunks as $chunk) {//Execute multiple queries
-            $countInserts += \Yii::$app->db->createCommand()
-                            ->batchInsert($this->tableName, $attributes, $chunk)->execute();
+			try {
+				$countInserts += \Yii::$app->db->createCommand()
+					->batchInsert($this->tableName, $attributes, $chunk)->execute();
+			} catch(CDbException $e) {}
+
+
         }
         return $countInserts;
     }
