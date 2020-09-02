@@ -74,6 +74,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
 
 			for ($i = 0; $i <= count($chunk); $i++) {
 				//try {
+				print_r($chunk[$i]);
 					$countInserts += \Yii::$app->db->createCommand()
 						->upsert($this->tableName, $attributes, $chunk[$i])->execute();
 
