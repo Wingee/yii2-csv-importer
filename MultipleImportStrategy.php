@@ -70,20 +70,21 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
         $countInserts = 0;
         $chunks = array_chunk($values, $this->maxItemsPerInsert);
         foreach ($chunks as $chunk) {//Execute multiple queries
-        	print_r($chunk);exit();
-			try {
-				//$countInserts += \Yii::$app->db->createCommand()
-				//	->batchInsert($this->tableName, $attributes, $chunk)->execute();
 
 
-				$db = \Yii::$app->db;
-				$sql = $db->queryBuilder->batchInsert($this->tableName, $attributes, $chunk);
-				echo $sql;
-				$countInserts += $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE')->execute();
-
-			} catch(PDOException $e) {}
+			foreach($chunk as $row){
+				//try {
+					$countInserts += \Yii::$app->db->createCommand()
+						->upsert($this->tableName, $attributes, $row)->execute();
 
 
+					/*$db = \Yii::$app->db;
+					$sql = $db->queryBuilder->batchInsert($this->tableName, $attributes, $chunk);
+					echo $sql;
+					$countInserts += $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE')->execute();*/
+
+				//} catch(PDOException $e) {}
+			}
         }
         return $countInserts;
     }
