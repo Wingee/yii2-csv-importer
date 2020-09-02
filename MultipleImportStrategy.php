@@ -66,7 +66,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
     public function import(&$data) {
         $attributes = $this->getAttributes();
         $values = $this->getValues($data);
-print_r($values);
+print_r($values);exit();
         $countInserts = 0;
         $chunks = array_chunk($values, $this->maxItemsPerInsert);
         foreach ($chunks as $chunk) {//Execute multiple queries
