@@ -66,7 +66,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
     public function import(&$data) {
         $attributes = $this->getAttributes();
         $values = $this->getValues($data);
-
+print_r($values);
         $countInserts = 0;
         $chunks = array_chunk($values, $this->maxItemsPerInsert);
         foreach ($chunks as $chunk) {//Execute multiple queries
@@ -74,7 +74,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
 
 			for ($i = 0; $i <= count($chunk); $i++) {
 				//try {
-				print_r($chunk[$i][0]);
+				print_r($chunk[$i]);
 					$countInserts += \Yii::$app->db->createCommand()
 						->upsert($this->tableName, $chunk[$i])->execute();
 
