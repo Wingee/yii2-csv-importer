@@ -77,6 +77,7 @@ class MultipleImportStrategy extends BaseImportStrategy implements ImportInterfa
 
 				$db = \Yii::$app->db;
 				$sql = $db->queryBuilder->batchInsert($this->tableName, $attributes, $chunk);
+				echo $sql;
 				$countInserts += $db->createCommand($sql . ' ON DUPLICATE KEY UPDATE')->execute();
 
 			} catch(PDOException $e) {}
